@@ -786,3 +786,11 @@ docker run -p 8080:8080 music-library-api
 4. Implement caching
 5. Add comprehensive test suite
 6. Deploy to cloud platform
+
+
+
+<img width="1280" height="800" alt="Снимок экрана 2026-02-11 в 12 46 18" src="https://github.com/user-attachments/assets/74576c39-a25c-485a-9262-29320fda390b" />
+
+<img width="1280" height="800" alt="Снимок экрана 2026-02-11 в 12 46 29" src="https://github.com/user-attachments/assets/57faa6ae-6edb-4343-bc0f-129962db8985" />
+
+
