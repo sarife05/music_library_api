@@ -4,17 +4,20 @@ import kz.aitu.music_library_api.exception.*;
 import kz.aitu.music_library_api.model.*;
 import kz.aitu.music_library_api.service.MediaServiceImpl;
 import kz.aitu.music_library_api.service.PlaylistServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin(origins = "*")
 public class MusicLibraryController {
 
     private final MediaServiceImpl mediaService;
     private final PlaylistServiceImpl playlistService;
 
+    @Autowired
     public MusicLibraryController(MediaServiceImpl mediaService,
                                   PlaylistServiceImpl playlistService) {
         this.mediaService = mediaService;

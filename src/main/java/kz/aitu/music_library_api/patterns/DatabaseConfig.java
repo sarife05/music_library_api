@@ -13,7 +13,7 @@ public class DatabaseConfig {
     private DatabaseConfig() {
         this.url = "jdbc:postgresql://localhost:5432/musiclibrary";
         this.username = "postgres";
-        this.password = "1234";
+        this.password = "Hinata03";
     }
 
     public static synchronized DatabaseConfig getInstance() {

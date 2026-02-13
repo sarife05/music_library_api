@@ -1,6 +1,7 @@
 package kz.aitu.music_library_api.model;
 
 import kz.aitu.music_library_api.exception.InvalidInputException;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 public abstract class Media implements Playable, Validatable<Media> {
     private int id;

@@ -88,7 +88,8 @@ public class MediaRepositoryImpl implements MediaRepository {
             return entity;
 
         } catch (Exception e) {
-            throw new DatabaseOperationException("Failed to create media", e);
+            e.printStackTrace();
+            throw new DatabaseOperationException("Failed to create media: " + e.getMessage(), e);
         }
     }
 
@@ -98,7 +99,8 @@ public class MediaRepositoryImpl implements MediaRepository {
         try {
             return jdbcTemplate.query(sql, mediaRowMapper());
         } catch (Exception e) {
-            throw new DatabaseOperationException("Failed to retrieve all media", e);
+            e.printStackTrace();
+            throw new DatabaseOperationException("Failed to retrieve all media: " + e.getMessage(), e);
         }
     }
 
@@ -114,7 +116,8 @@ public class MediaRepositoryImpl implements MediaRepository {
         } catch (ResourceNotFoundException e) {
             throw e;
         } catch (Exception e) {
-            throw new DatabaseOperationException("Failed to retrieve media by ID", e);
+            e.printStackTrace();
+            throw new DatabaseOperationException("Failed to retrieve media by id: " + e.getMessage(), e);
         }
     }
 
@@ -149,7 +152,8 @@ public class MediaRepositoryImpl implements MediaRepository {
             return entity;
 
         } catch (Exception e) {
-            throw new DatabaseOperationException("Failed to update media", e);
+            e.printStackTrace();
+            throw new DatabaseOperationException("Failed to update media: " + e.getMessage(), e);
         }
     }
 
@@ -164,8 +168,9 @@ public class MediaRepositoryImpl implements MediaRepository {
             int rows = jdbcTemplate.update(sql, id);
             return rows > 0;
         } catch (Exception e) {
-            throw new DatabaseOperationException("Failed to delete media", e);
-        }
+    e.printStackTrace();
+    throw new DatabaseOperationException("Failed to delete media: " + e.getMessage(), e);
+}
     }
 
     @Override
@@ -175,7 +180,8 @@ public class MediaRepositoryImpl implements MediaRepository {
             Integer count = jdbcTemplate.queryForObject(sql, Integer.class, id);
             return count != null && count > 0;
         } catch (Exception e) {
-            throw new DatabaseOperationException("Failed to check media existence", e);
+            e.printStackTrace();
+            throw new DatabaseOperationException("Failed to check media existence: " + e.getMessage(), e);
         }
     }
 
@@ -185,7 +191,8 @@ public class MediaRepositoryImpl implements MediaRepository {
         try {
             return jdbcTemplate.query(sql, mediaRowMapper(), type.name());
         } catch (Exception e) {
-            throw new DatabaseOperationException("Failed to find media by type", e);
+            e.printStackTrace();
+            throw new DatabaseOperationException("Failed to find media by type: " + e.getMessage(), e);
         }
     }
 
@@ -195,7 +202,8 @@ public class MediaRepositoryImpl implements MediaRepository {
         try {
             return jdbcTemplate.query(sql, mediaRowMapper(), creator);
         } catch (Exception e) {
-            throw new DatabaseOperationException("Failed to find media by creator", e);
+            e.printStackTrace();
+            throw new DatabaseOperationException("Failed to find media by creator: " + e.getMessage(), e);
         }
     }
 
@@ -205,7 +213,8 @@ public class MediaRepositoryImpl implements MediaRepository {
         try {
             return jdbcTemplate.query(sql, mediaRowMapper(), "%" + keyword + "%");
         } catch (Exception e) {
-            throw new DatabaseOperationException("Failed to search media by name", e);
+            e.printStackTrace();
+            throw new DatabaseOperationException("Failed to find media by name: " + e.getMessage(), e);
         }
     }
 

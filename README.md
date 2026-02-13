@@ -616,7 +616,7 @@ logging.pattern.console=%d{yyyy-MM-dd HH:mm:ss} - %msg%n
        <dependency>
           <groupId>org.postgresql</groupId>
           <artifactId>postgresql</artifactId>
-          <version>42.7.8</version>
+          <version>42.7.3</version>
           <scope>runtime</scope>
        </dependency>
         

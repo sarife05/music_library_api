@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS media (
+CREATE TABLE IF NOT EXISTS Media (
                                      id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
                                      name TEXT NOT NULL,
                                      duration INTEGER NOT NULL CHECK(duration > 0),
@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS media (
     UNIQUE(name, type, creator)
     );
 
-CREATE TABLE IF NOT EXISTS playlists (
+CREATE TABLE IF NOT EXISTS Playlist(
                                          id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
                                          name TEXT NOT NULL UNIQUE,
                                          description TEXT
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS playlist_items (
 
     CONSTRAINT fk_playlist
     FOREIGN KEY (playlist_id)
-    REFERENCES playlists (id)
+    REFERENCES Playlist (id)
     ON DELETE CASCADE,
 
     CONSTRAINT fk_media
@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS playlist_items (
     );
 
 
-INSERT INTO media (name, duration, type, creator, album, genre, price) VALUES
+INSERT INTO Media (name, duration, type, creator, album, genre, price) VALUES
                                                                            ('Bohemian Rhapsody', 354, 'SONG', 'Queen', 'A Night at the Opera', 'Rock', 1.29),
                                                                            ('Imagine', 183, 'SONG', 'John Lennon', 'Imagine', 'Pop', 0.99),
                                                                            ('Stairway to Heaven', 482, 'SONG', 'Led Zeppelin', 'Led Zeppelin IV', 'Rock', 1.29),
@@ -51,14 +51,14 @@ INSERT INTO media (name, duration, type, creator, album, genre, price) VALUES
                                                                            ('Sweet Child O Mine', 356, 'SONG', 'Guns N Roses', 'Appetite for Destruction', 'Rock', 1.29),
                                                                            ('Thriller', 357, 'SONG', 'Michael Jackson', 'Thriller', 'Pop', 0.99);
 
-INSERT INTO media (name, duration, type, creator, host, episode_number, category) VALUES
+INSERT INTO Media (name, duration, type, creator, host, episode_number, category) VALUES
                                                                                       ('The Joe Rogan Experience', 7200, 'PODCAST', 'Joe Rogan', 'Joe Rogan', 1987, 'Comedy'),
                                                                                       ('Hardcore History', 14400, 'PODCAST', 'Dan Carlin', 'Dan Carlin', 68, 'History'),
                                                                                       ('Serial - Season 1', 2700, 'PODCAST', 'This American Life', 'Sarah Koenig', 1, 'True Crime'),
                                                                                       ('How I Built This', 3600, 'PODCAST', 'NPR', 'Guy Raz', 250, 'Business'),
                                                                                       ('The Daily', 1800, 'PODCAST', 'The New York Times', 'Michael Barbaro', 1500, 'News');
 
-INSERT INTO playlists (name, description) VALUES
+INSERT INTO Playlist (name, description) VALUES
                                               ('Classic Rock Anthems', 'The greatest rock songs of all time'),
                                               ('Pop Legends', 'Iconic pop hits that defined generations'),
                                               ('Educational Podcasts', 'Learn something new every day'),
