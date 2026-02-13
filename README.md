@@ -794,3 +794,137 @@ docker run -p 8080:8080 music-library-api
 <img width="1280" height="800" alt="Снимок экрана 2026-02-11 в 12 46 29" src="https://github.com/user-attachments/assets/57faa6ae-6edb-4343-bc0f-129962db8985" />
 
 
+
+Layered Architecture
+
+```
+┌─────────────────────────────────────────────────┐
+│              Controller Layer                    │
+│  (REST Endpoints, Request/Response Handling)    │
+└─────────────────────┬───────────────────────────┘
+                      │
+┌─────────────────────▼───────────────────────────┐
+│               Service Layer                      │
+│  (Business Logic, Validation, Caching)          │
+└─────────────────────┬───────────────────────────┘
+                      │
+┌─────────────────────▼───────────────────────────┐
+│             Repository Layer                     │
+│  (Data Access, Database Operations)             │
+└─────────────────────┬───────────────────────────┘
+                      │
+┌─────────────────────▼───────────────────────────┐
+│              Database (PostgreSQL)               │
+└─────────────────────────────────────────────────┘
+```
+
+### Caching Architecture
+
+```
+┌──────────────┐
+│   Request    │
+└──────┬───────┘
+       │
+┌──────▼───────────────────┐
+│   Service Layer          │
+│  ┌────────────────────┐  │
+│  │  Check Cache       │  │──── Cache Hit ────► Return Data
+│  └────────┬───────────┘  │
+│           │ Cache Miss   │
+│  ┌────────▼───────────┐  │
+│  │  Query Database    │  │
+│  └────────┬───────────┘  │
+│           │              │
+│  ┌────────▼───────────┐  │
+│  │  Store in Cache    │  │
+│  └────────────────────┘  │
+└──────────────────────────┘
+```
+
+
+Implementation Details
+
+#### Singleton Pattern
+```java
+@Component
+public class CacheManager {
+    private static volatile CacheManager instance;
+    private final Map<String, CacheEntry<?>> cache;
+    
+    private CacheManager() {
+        this.cache = new ConcurrentHashMap<>();
+    }
+    
+    public static CacheManager getInstance() {
+        if (instance == null) {
+            synchronized (CacheManager.class) {
+                if (instance == null) {
+                    instance = new CacheManager();
+                }
+            }
+        }
+        return instance;
+    }
+}
+```
+
+#### Service Integration
+```java
+@Service
+public class MediaServiceImpl implements MediaService {
+    private final CacheService cacheService;
+    
+    @Override
+    public List<Media> getAllMedia() {
+        // Try cache first
+        Optional<List<Media>> cached = cacheService.getCachedList("media:all");
+        if (cached.isPresent()) {
+            return cached.get(); // Cache HIT
+        }
+        
+        // Cache MISS - query database
+        List<Media> result = mediaRepository.getAll();
+        
+        // Store in cache
+        cacheService.cacheList("media:all", result);
+        
+        return result;
+    }
+}
+```
+
+---
+
+# Design Patterns
+
+# 1. Singleton Pattern
+- *Used in*: `CacheManager`, `LoggingService`, `DatabaseConfig`, `AppConfig`
+- *Purpose*: Ensure single instance, global access point
+- *Implementation*: Thread-safe double-checked locking
+
+# 2. Factory Pattern
+- **Used in**: `MediaFactory`
+- **Purpose**: Create different media types (Song, Podcast)
+- **Benefit**: Encapsulates object creation logic
+
+# 3. Builder Pattern
+- *Used in*: `PlaylistBuilder`
+- *Purpose*: Construct complex Playlist objects
+- *Benefit*: Fluent API for object construction
+
+
+# 4. Strategy Pattern
+- *Used in*: `CacheService` interface
+- *Purpose*: Allow different cache implementations
+- *Benefit*: Easy to swap caching strategies
+
+ 
+# 5. Repository Pattern
+- Used in: `MediaRepository`, `PlaylistRepository`
+- Purpose: Abstract data access logic
+- Benefit: Separation of concerns, testability
+
+<img width="1280" height="800" alt="Снимок экрана 2026-02-13 в 13 59 14" src="https://github.com/user-attachments/assets/16297f0d-5081-46c1-b29d-75f29869b5bb" />
+
+
+
