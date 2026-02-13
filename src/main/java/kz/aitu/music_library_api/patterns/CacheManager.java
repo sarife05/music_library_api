@@ -6,15 +6,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
-/**
- * Singleton Cache Manager - Thread-safe in-memory cache implementation
- * Follows SOLID principles:
- * - Single Responsibility: Manages cache operations only
- * - Open/Closed: Extensible through generic type support
- * - Liskov Substitution: Can be replaced with any cache implementation
- * - Interface Segregation: Clear, focused methods
- * - Dependency Inversion: Uses generic types, not concrete implementations
- */
+/* Singleton */
 @Component
 public class CacheManager {
 
@@ -23,8 +15,7 @@ public class CacheManager {
     private final Map<String, CacheEntry<?>> cache;
     private final LoggingService loggingService;
 
-    /**
-     * Private constructor to enforce Singleton pattern
+    /*  Private constructor
      */
     private CacheManager() {
         this.cache = new ConcurrentHashMap<>();
@@ -41,9 +32,7 @@ public class CacheManager {
         }
     }
 
-    /**
-     * Thread-safe Singleton instance retrieval using double-checked locking
-     */
+    
     public static CacheManager getInstance() {
         if (instance == null) {
             synchronized (CacheManager.class) {
@@ -55,9 +44,7 @@ public class CacheManager {
         return instance;
     }
 
-    /**
-     * Store a value in cache with a specific key
-     */
+    
     public <T> void put(String key, T value) {
         if (key == null || value == null) {
             loggingService.logWarn("Attempted to cache null key or value");
@@ -68,9 +55,6 @@ public class CacheManager {
         loggingService.logDebug("Cached: " + key);
     }
 
-    /**
-     * Store a list in cache with a specific key
-     */
     public <T> void putList(String key, List<T> value) {
         if (key == null || value == null) {
             loggingService.logWarn("Attempted to cache null key or list");
@@ -81,9 +65,7 @@ public class CacheManager {
         loggingService.logDebug("Cached list: " + key + " (size: " + value.size() + ")");
     }
 
-    /**
-     * Retrieve a value from cache
-     */
+    
     @SuppressWarnings("unchecked")
     public <T> Optional<T> get(String key, Class<T> type) {
         if (key == null) {
@@ -100,9 +82,7 @@ public class CacheManager {
         return Optional.empty();
     }
 
-    /**
-     * Retrieve a list from cache
-     */
+    
     @SuppressWarnings("unchecked")
     public <T> Optional<List<T>> getList(String key) {
         if (key == null) {
@@ -121,8 +101,8 @@ public class CacheManager {
         return Optional.empty();
     }
 
-    /**
-     * Invalidate (remove) a specific cache entry
+    /*
+      Invalidate (remove) a specific cache entry
      */
     public void invalidate(String key) {
         if (key != null && cache.remove(key) != null) {
@@ -130,9 +110,7 @@ public class CacheManager {
         }
     }
 
-    /**
-     * Invalidate all cache entries matching a pattern
-     * Example: invalidate("media:*") removes all media-related cache entries
+    /* Invalidate all cache entries matching a pattern
      */
     public void invalidatePattern(String pattern) {
         if (pattern == null) {
@@ -156,8 +134,7 @@ public class CacheManager {
         }
     }
 
-    /**
-     * Clear all cache entries
+    /* Clear all cache entries
      */
     public void clearAll() {
         int size = cache.size();
@@ -165,8 +142,7 @@ public class CacheManager {
         loggingService.logInfo("Cache cleared: " + size + " entries removed");
     }
 
-    /**
-     * Check if a key exists in cache
+    /* Check if a key exists in cache
      */
     public boolean containsKey(String key) {
         return key != null && cache.containsKey(key);
